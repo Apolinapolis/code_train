@@ -27,4 +27,4 @@ def test_statistic_counter():
                 result[el['name']]['avg_ok_time'] = float(result[el['name']]['avg_ok_time'] / result[el['name']]['ok'])
             else:
                 result[el['name']]['fail'] += 1
-    return result
+    # return result
