@@ -1,30 +1,72 @@
-data = [
-    {"name": "Alice", "status": "ok", "response_time": 120},
-    {"name": "Bob", "status": "fail", "response_time": 250},
-    {"name": "Alice", "status": "ok", "response_time": 130},
-    {"name": "Alice", "status": "fail", "response_time": 500},
-    {"name": "Bob", "status": "ok", "response_time": 230}
+def test_check_all_brackets() -> bool:
+    s = "{[()]}"
+    pairs = {')': '(', ']': '[', '}': '{'}
+    opening = set(pairs.values())  # {'(', '[', '{'}
+    stack = []
+
+    for ch in s:
+        if ch in opening:
+            stack.append(ch)
+        elif ch in pairs:  # закрывающая скобка
+            if not stack:
+                return False
+            if stack[-1] != pairs[ch]:
+                return False
+            stack.pop()
+    return len(stack) == 0
+
+
+# check_all_brackets("{[()]}")      # True
+# check_all_brackets("{[(])}")      # False  (неправильный порядок)
+# check_all_brackets("{{[[(())]]}}")# True
+
+# Содержит символ "@"
+# После "@" есть хотя бы одна точка .
+# Не начинается и не заканчивается на "@" или "."
+
+emails = [
+    "test@gmail.com",
+    "wrong@com",
+    "@yahoo.com",
+    "admin@mail.ru",
+    "alex@.ru",
+    "valid@ya.ru"
 ]
-
-# {
-#   'Alice': {'ok': 2, 'fail': 1, 'avg_ok_time': 125.0},
-#   'Bob':   {'ok': 1, 'fail': 1, 'avg_ok_time': 230.0}
-# }
+# результат: ["test@gmail.com", "admin@mail.ru", "valid@ya.ru"]
 
 
-def test_statistic_counter():
-    result = {}
+def email_guard(arr:list[str]) -> list[str]:
+    result = []
+    target = {}
+
+    for el in arr:
+        if '@' in el:
+            for ind, c in enumerate(el):
+                if el[0] == '@' or el[-1] == '@':
+                    continue
+                if el[0] == '.' or el[-1] == '.':
+                    continue
+                target[c] = ind
+        if target['.'] > target['@']:
+            result.append(el)
+            target = {}
+    return result
+
+
+def test_email_guard():
+    data = emails
+    result = []
+    target = {}
+
     for el in data:
-        if el['name'] not in result:
-            if el['status'] == 'ok':
-                result[el['name']] = {'ok':1, 'fail':0, 'avg_ok_time': el['response_time']}
-            else:
-                result[el['name']] = {'ok': 0, 'fail': 1, 'avg_ok_time': 0}
-        else:
-            if el['status'] == 'ok':
-                result[el['name']]['ok'] += 1
-                result[el['name']]['avg_ok_time'] += el['response_time']
-                result[el['name']]['avg_ok_time'] = float(result[el['name']]['avg_ok_time'] / result[el['name']]['ok'])
-            else:
-                result[el['name']]['fail'] += 1
-    # return result
+        if '@' in el:
+            for ind, c in enumerate(el):
+                if el[0] == '@' or el[-1] == '@':
+                    continue
+                if el[0] == '.' or el[-1] == '.':
+                    continue
+                target[c] = ind
+        if target['.'] > target['@']:
+            result.append(el)
+            target = {}
+    print(result)
