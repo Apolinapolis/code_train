@@ -53,3 +53,29 @@ def merge_order(ord_one, ord_two):
     for k, v in result.items():
         result_arr.append({'id': k, 'amount': v})
     return result_arr
+
+# 31 10 2025
+
+orders = [
+    {"user": "Иван", "amount": 100},
+    {"user": "Иван", "amount": 200},
+    {"user": "Ольга", "amount": 0},
+    {"user": "Антон", "amount": 500},
+    {"user": "Антон", "amount": 500},
+]
+
+
+def test_rich_user():
+    result = {}
+    result_dict = []
+    for el in orders:
+        if el['user'] in result:
+            result[el['user']] += el['amount']
+        else:
+            result[el['user']] = el['amount']
+
+    for k, v in result.items():
+        if v > 300:
+            result_dict.append({"user": k, "total": v})
+
+    return sorted(result_dict, key=lambda x: x['total'], reverse=True)
