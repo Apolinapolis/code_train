@@ -56,13 +56,13 @@ def merge_order(ord_one, ord_two):
 
 # 31 10 2025
 
-orders = [
-    {"user": "Иван", "amount": 100},
-    {"user": "Иван", "amount": 200},
-    {"user": "Ольга", "amount": 0},
-    {"user": "Антон", "amount": 500},
-    {"user": "Антон", "amount": 500},
-]
+# orders = [
+#     {"user": "Иван", "amount": 100},
+#     {"user": "Иван", "amount": 200},
+#     {"user": "Ольга", "amount": 0},
+#     {"user": "Антон", "amount": 500},
+#     {"user": "Антон", "amount": 500},
+# ]
 
 
 def test_rich_user():
@@ -79,3 +79,149 @@ def test_rich_user():
             result_dict.append({"user": k, "total": v})
 
     return sorted(result_dict, key=lambda x: x['total'], reverse=True)
+
+
+# 02 11 2025
+
+# orders = [
+#     {"id": 1, "amount": 100, "status": "paid"},
+#     {"id": 2, "amount": 0, "status": "error"},
+#     {"id": 3, "amount": 800, "status": "paid"},
+#     {"id": 4, "amount": -50, "status": "paid"},
+#     {"id": 5, "amount": 200, "status": "pending"},
+#     {"id": 6, "amount": 0, "status": "paid"},
+# ]
+
+# [
+#     {"id": 1, "amount": 100, "status": "paid", "tag": "small"},
+#     {"id": 3, "amount": 800, "status": "paid", "tag": "big"},
+# ]
+
+
+
+
+def validate_and_tag(orders:list[dict]) -> list[dict]:
+    result = []
+    for order in orders:
+        if order['status'] != 'paid' or order['amount'] <= 0:
+            continue
+        else:
+            if order['amount'] < 300:
+                status = 'small'
+            elif order['amount'] < 700:
+                status = 'medium'
+            else:
+                status = 'big'
+            result.append({**order, "tag": status})
+    return result
+
+# def validate_and_tag(orders):
+#     return [
+#         {**o, "tag": "small" if o["amount"] < 300 else "medium" if o["amount"] < 700 else "big"}
+#         for o in orders
+#         if o["status"] == "paid" and o["amount"] > 0
+#     ]
+
+#
+
+# 03 11 2025
+
+
+# orders = [
+#     {"id": 1, "amount": 120, "status": "paid"},
+#     {"id": 2, "amount": -20, "status": "paid"},
+#     {"id": 3, "amount": 900, "status": "paid"},
+#     {"id": 4, "amount": 0, "status": "pending"},
+#     {"id": 5, "amount": 450, "status": "paid"}
+# ]
+#
+# # {"id": <id>, "tag": <"small" / "medium" / "big">}
+#
+# def list_comprehension(orders):
+#     return[ {"id": el['id'], 'tag': 'small' if el['amount'] < 300 else 'medium' if el['amount'] < 700 else 'big'}
+#             for el in orders if el['amount'] > 0 and el['status'] == 'paid' ]
+
+
+
+# orders = [
+#     {"id": 1, "items": [ {"name": "tea", "price": 200}, {"name": "cake", "price": 150} ]},
+#     {"id": 2, "items": [ {"name": "coffee", "price": 0}, {"name": "sandwich", "price": 250} ]},
+#     {"id": 3, "items": [ {"name": "juice", "price": 0}, {"name": "water", "price": 0} ]},
+# ]
+#
+#
+# # [
+# #     {"id": 1, "status": "valid"},
+# #     {"id": 2, "status": "has_free_item"},
+# #     {"id": 3, "status": "invalid"}
+# # ]
+#
+#
+# def analyze_orders(orders):
+#     return [{'id': el['id'], 'status': 'has_free_item' if any(item['price'] == 0 for item in el['items'])
+#     else 'invalid' if all(item['price'] <= 0 for item in el['items']) else 'valid'} for el in orders]
+
+
+#
+# orders = [
+#     {
+#         "id": 1,
+#         "items": [
+#             {"name": "tea", "price": 200, "category": "drink"},
+#             {"name": "cake", "price": 300, "category": "food"},
+#         ],
+#     },
+#     {
+#         "id": 2,
+#         "items": [
+#             {"name": "coffee", "price": 0, "category": "drink"},
+#             {"name": "sandwich", "price": 400, "category": "food"},
+#         ],
+#     },
+#     {
+#         "id": 3,
+#         "items": [
+#             {"name": "water", "price": 0, "category": "drink"},
+#             {"name": "cookie", "price": 0, "category": "food"},
+#         ],
+#     },
+# ]
+#
+# # [
+# #     {"id": 1, "food_items": 1, "drink_items": 1, "free_items": 0},
+# #     {"id": 2, "food_items": 1, "drink_items": 1, "free_items": 1},
+# #     {"id": 3, "food_items": 1, "drink_items": 1, "free_items": 2},
+# # ]
+#
+#
+# def summarize_orders(orders):
+#     return [{'id': order['id'],
+#              'food_items': sum(1 for item in order['items'] if item['category'] == 'food'),
+#              'drink_items': sum (1 for item in order['items'] if item['category'] == 'drink'),
+#              'free_items': sum(1 for item in order['items'] if item['price'] == 0)}
+#             for order in orders]
+
+#      BOOOOOOOM!
+
+
+
+
+
+
+
+
+users = [
+    {"id": 1, "name": "Alice", "age": 25, "email": "alice@example.com"},
+    {"id": 2, "name": "", "age": 0, "email": "bobexample.com"},
+    {"id": 3, "name": "Charlie", "age": 35, "email": "charlie@mail.com"},
+    {"id": 4, "name": "Daisy", "age": 19, "email": "daisy@@mail.com"},
+]
+
+
+# "Alice (25) — alice@example.com"
+# "Charlie (35) — charlie@mail.com"
+
+
+def last_for_today(users):
+    return [f"{el['name']} ({el['age']}) - {el['email']}"
+            for el in users if el['name'] != '' and el['age'] > 0 and el['email'].count('@') == 1 ]
