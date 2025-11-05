@@ -1,3 +1,6 @@
+from audioop import reverse
+
+
 def test_check_all_brackets() -> bool:
     s = "{[()]}"
     pairs = {')': '(', ']': '[', '}': '{'}
@@ -205,11 +208,6 @@ def validate_and_tag(orders:list[dict]) -> list[dict]:
 
 
 
-
-
-
-
-
 users = [
     {"id": 1, "name": "Alice", "age": 25, "email": "alice@example.com"},
     {"id": 2, "name": "", "age": 0, "email": "bobexample.com"},
@@ -225,3 +223,71 @@ users = [
 def last_for_today(users):
     return [f"{el['name']} ({el['age']}) - {el['email']}"
             for el in users if el['name'] != '' and el['age'] > 0 and el['email'].count('@') == 1 ]
+
+
+# 05 11 2025
+
+
+orders = {
+    "Alice": 1200,
+    "Bob": 0,
+    "Charlie": 450,
+    "Daisy": 800,
+    "Eve": 0,
+}
+
+# исключены пользователи с суммой <= 0
+# имена ключей переведены в верхний регистр
+# отсортировано по сумме (по убыванию)
+
+
+def process_orders(data: dict) -> dict:
+    sorted_dict = {k.upper() : v for k, v in data.items() if v > 0}
+    return dict(sorted(sorted_dict.items(), key= lambda x: x[1], reverse=True))
+
+
+def test_ord():
+    print(process_orders(orders))
+
+
+
+students = [
+    {'name': 'Иван', 'score': 75},
+    {'name': 'Мария', 'score': 92},
+    {'name': 'Петр', 'score': 45},
+    {'name': 'Ольга', 'score': 99},
+    {'name': 'Сергей', 'score': 61}
+]
+
+
+# Отфильтровать только тех, у кого score >= 70
+# Отсортировать их по убыванию score
+# Вернуть список имён этих студентов в порядке убывания баллов
+
+
+def top_students(data: list[dict]) -> list:
+    top_list = [el for el in data if el['score'] > 69]
+    sorted_top_list = sorted(top_list, key=lambda x: x['score'], reverse=True)
+    return [el['name'] for el in sorted_top_list]
+
+
+orders_05_11 = [
+    {"id": 1, "user": "Alice", "amount": 120},
+    {"id": 2, "user": "Bob", "amount": 0},
+    {"id": 3, "user": "Charlie", "amount": 450},
+    {"id": 4, "user": "Alice", "amount": 300},
+    {"id": 5, "user": "Bob", "amount": 700}
+]
+
+# вернёт список имён пользователей,
+# у которых суммарный amount > 500,
+# отсортированный по убыванию суммы.
+
+
+def best_costumers(orders:list[dict])-> list[str]:
+    # total = {el['user'] : el['amount'] for el in orders if el['user'] not in total else el['user'] += el['amount']}
+    # return [name for name in total if name > 500]
+    total = {}
+    for o in orders:
+        total[o['user']] = total.get(o['user'], 0) + o['amount']
+    # return sorted(total.items(), key= lambda x: x[1], reverse=True)]
