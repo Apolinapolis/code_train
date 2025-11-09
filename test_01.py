@@ -290,7 +290,7 @@ def best_costumers(orders:list[dict])-> list[str]:
     for k,v in total.items():
         if v > 500:
             filtered[k] = v
-    return list(name for name, value in sorted(filtered.items(), key= lambda x: x[1], reverse=True))
+    return list(name for name, _ in sorted(filtered.items(), key= lambda x: x[1], reverse=True))
 
 
 
@@ -320,3 +320,45 @@ def fibo(n):
     for _ in range(n):
         a,b = b, a+b
         return a
+
+
+# 09 11 2025
+
+# text = "Hello, hello world! World hello."
+# {'hello': 3, 'world': 2}
+import re
+
+def words_counter(text):
+    words_arr = re.split(r'[,?!. ]+', text)
+    result = {}
+    for word in words_arr:
+        if word:
+            word=word.lower()
+            result[word] = result.get(word, 0) + 1
+    return result
+
+import re
+
+
+text = "apple banana apple orange banana banana kiwi apple"
+# [('apple', 3), ('banana', 3), ('kiwi', 1)]
+
+def test_most_popular_words():
+
+    word_list = text.split(' ')
+    top_words_dict = {}
+
+    for w in word_list:
+        top_words_dict[w] = top_words_dict.get(w, 0) + 1
+
+    tuples = []
+    for w, c in top_words_dict.items():
+        tuples.append((w,c))
+
+
+    by_count_sorted = sorted(top_words_dict, key= lambda x: x[1], reverse=True)
+
+    print(tuples)
+    print(list((word, value) for word, value in sorted(top_words_dict.items(), key= lambda x: x[1], reverse=True)))
+
+#     Остается сортировать при равенстве значений и выводить нужное количество
