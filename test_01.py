@@ -349,3 +349,24 @@ def most_popular_words(words, positions):
     for w in word_list:
         counter[w] = counter.get(w, 0) + 1
     return list((word, value) for word, value in sorted(counter.items(), key= lambda x: (x[-1], x[0])))[:positions]
+
+
+# 12 11 2025
+
+# players = [
+#     {"name": "Petr", "wins": 5, "losses": 3},
+#     {"name": "Anna", "wins": 5, "losses": 1},
+#     {"name": "Ivan", "wins": 5, "losses": 1},
+#     {"name": "Olga", "wins": 3, "losses": 4},
+# ]
+# --->
+# [
+#     {"name": "Anna", "wins": 5, "losses": 1},
+#     {"name": "Ivan", "wins": 5, "losses": 1},
+#     {"name": "Petr", "wins": 5, "losses": 3},
+#     {"name": "Olga", "wins": 3, "losses": 4},
+# ]
+
+
+def top_players(players:list[dict]) -> list[dict]:
+    return sorted(players, key=lambda x: (-x['wins'], x['losses', x['name']]))
