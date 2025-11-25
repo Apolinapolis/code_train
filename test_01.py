@@ -425,33 +425,98 @@ example_data = {
     "price": 123
 }
 
+# import requests
+#
+# def test_base_check():
+#     url = 'https://dummyjson.com/products'
+#     response = requests.get(url)
+#
+#
+#     assert response.status_code == 200
+#     assert response.headers['content-type'].startswith('application/json')
+#
+#     data = response.json()
+#     products = data['products']
+#
+#     assert 'products' in data
+#     assert isinstance(products, list)
+#
+#     has_discount = False
+#
+#     for p in products:
+#         assert isinstance(p, dict)
+#         assert isinstance(p['title'], str)
+#         assert p['id'] > 0
+#         assert p['price'] > 0
+#         assert 'discountPercentage' in p
+#         if p['discountPercentage'] > 0:
+#             has_discount = True
+#     assert has_discount == True
+
+
+
+
+
+
+
+
 import requests
 
-def test_base_check():
-    url = 'https://dummyjson.com/products'
-    response = requests.get(url)
+
+BASE_URL = 'https://dummyjson.com/products'
 
 
-    assert response.status_code == 200
-    assert response.headers['content-type'].startswith('application/json')
 
-    data = response.json()
+def test_get_products_base():
+    res = requests.get(f'{BASE_URL}?limit=5')
+    data = res.json()
+
+    assert res.status_code == 200
+    assert res.headers['content-type'].startswith('application/json')
+    assert 'products' in data
+
     products = data['products']
 
-    assert 'products' in data
     assert isinstance(products, list)
+    assert len(products) > 0
 
-    has_discount = False
+    for el in products:
+        assert 'id' in el
+        assert 'title' in el
+        assert 'price' in el
+        assert el['price'] > 0
 
-    for p in products:
-        assert isinstance(p, dict)
-        assert isinstance(p['title'], str)
-        assert p['id'] > 0
-        assert p['price'] > 0
-        assert 'discountPercentage' in p
-        if p['discountPercentage'] > 0:
-            has_discount = True
-    assert has_discount == True
+
+def test_create_product():
+    payload = {"title": "TestProduct", "price": 123}
+    res = requests.post(f'{BASE_URL}/add', data=payload)
+    data = res.json()
+
+    assert res.status_code == 201
+    assert 'id' in data
+    assert 'title' in data
+    assert 'price' in data
+    assert isinstance(data['id'], int)
+    assert data['title'] == payload['title']
+    assert data['price'] == str(payload['price'])
+
+
+def test_create_product_negative():
+    payload = {'price':-12}
+    res = requests.post(f'{BASE_URL}/add',payload)
+    data = res.json()
+
+    assert res.status_code == 400
+    assert data['message'] == 'price must be more then zero'
+#реально от сервера я получаю 201 created
+
+
+
+# а как обратиться к БД??
+# а как проверять по схеме например validate / pydantic
+
+
+
 
 
 
