@@ -510,10 +510,81 @@ def test_create_product_negative():
     assert data['message'] == 'price must be more then zero'
 #реально от сервера я получаю 201 created
 
-
+import pytest
 
 # а как обратиться к БД??
 # а как проверять по схеме например validate / pydantic
+
+
+# POST /auth/login
+
+# Ответы:
+# 200 — успех: {"token": "..."}
+# 400 — пустые поля или неправильный тип данных
+# 403 — неверные учетные данные
+
+
+# Позитивный тест — успешная авторизация.
+# Негативные тесты — параметризованные:
+# пустой логин
+# пустой пароль
+# пустой логин и пароль
+# неверный пароль
+# неверный логин
+
+
+class ApiClient:
+    def __init__(self, base_url, headers):
+        self.base_url = base_url
+        self.headers = headers
+
+    def post(self, path, data=None, headers=None):
+        return requests.post(f"{self.base_url}{path}", json=data, headers=headers)
+
+    def get(self, path, params=None, headers=None):
+        return  requests.get(f"{self.base_url}{path}",params=params, headers=headers)
+
+
+
+@pytest.fixture
+def api():
+    return ApiClient(base_url = 'https://apolinapolis.ru')
+
+@pytest.fixture
+def auth_token(api):
+    resp = api.post(path='/auth', data={"username": "zorro", "password": "123"})
+    return resp.json()['token']
+
+@pytest.fixture
+def authorized_api(api, auth_token):
+    api.headers['authorization'] = f'Bearer {auth_token}'
+    return api
+
+
+
+def test_authorization_valid(api):
+    resp = api.post('auth/login', {'user':'roma', 'pass':'123'})
+    data = resp.json()
+
+    assert resp.status_code == 200
+    assert 'token' in data
+    assert isinstance(data['token'], str)
+
+@pytest.mark.parametrize(
+    "login, pass, code", [
+        ('', '', 400),
+        ('', '123', 400),
+        ('roma', '', 400),
+        ('roma', 'wrong', 403)
+    ]
+)
+def test_auth_negative():
+    pass
+#
+
+
+
+
 
 
 
