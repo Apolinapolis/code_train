@@ -42,19 +42,32 @@ def retry(func, times):
 # def my_function(name, job):
 #     return f'{name} - {job}'
 
-
+# def logger(f):
+#     def wrapper(*args, **kwargs):
+#         print('i"m observ')
+#         return f(*args, **kwargs)
+#     return wrapper
+#
+# def greet(*args, **kwargs):
+#     print(f"Привет, {args} & {kwargs}")
+#
+# decorated = logger(greet)
+# decorated('ops', 'uo','kamon', named='baba', name='deda')
 
 
 if __name__ == "__main__":
+
     def logger(f):
-        def wrapper(*args, **kwargs):
-            print('i"m observ')
+        def wrapper(*args,**kwargs):
+            print(f'function {f.__name__} is called!')
+            print(f'with args:{args}')
+            print(f'and kwargs:{kwargs}')
             return f(*args, **kwargs)
         return wrapper
 
-    def greet(*args, **kwargs):
-        print(f"Привет, {args} & {kwargs}")
+    @logger
+    def power(base, exp=2):
+        return base ** exp
 
-    decorated = logger(greet)
-    decorated('ops', 'uo','kamon', named='baba', name='deda')
+    print(power(3, exp=4))
 
