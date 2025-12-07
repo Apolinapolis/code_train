@@ -641,5 +641,33 @@ print(longest_word(["python", "qa", "automation"]))
 
 
 
+# 07 12 2025
+def test_movie_zeros():
+    data = [1,2,5,1,2,0,4,2,0,456,30,3]
+    result = []
+    zeros = []
+
+    for el in data:
+        if el == 0:
+            zeros.append(el)
+        else:
+            result.append(el)
+    result.extend(zeros)
+    print(result)
+
+
+def test_letters_mixer():
+    example_data = "O tempora o mores !" # 'Oay emporatay oay oresmay !'
+    result = example_data.split(' ')
+    itog = ''
+    for word in result:
+        if word in ['!','?','.',',']:
+            itog += word
+        itog += word[1:]+word[0]+'ay '
+    print(itog)
+
+
+
+
 if __name__ == "__main__":
     print(greet)
