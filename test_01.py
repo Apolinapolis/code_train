@@ -703,5 +703,35 @@ def file_reader(file):
 
 
 
+def self_read(path):
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            result = []
+            for _ in range(5):
+                line = f.readline()
+                if not line:
+                    break
+                result.append(line.strip('\r\n'))
+            return result
+    except FileNotFoundError:
+        return 'file not found'
+
+
+# words = ["eat", "tea", "tan", "ate", "nat", "bat"]
+
+def group_anagram(words):
+    result = {}
+    for w in words:
+        key = ''.join(sorted(w))
+        if key in result:
+            result[key].append(w)
+        else:
+            result[key] = [w]
+    return result
+
+
+
+
+
 if __name__ == "__main__":
-    print(greet)
+    print(sorted('sdgsdg'))
