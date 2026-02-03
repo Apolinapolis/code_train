@@ -33,3 +33,5 @@ def factorial_base(n):
 import sys
 print(sys.getrecursionlimit()) # Проверяем лимит глубины рекурсии
 sys.setrecursionlimit(333) # Так можно установить лимит глубины рекурсии
+
+#TODO 26 мин
