@@ -36,3 +36,14 @@ tes = Person('dimon')
 print(Person.class_attr)
 print(tes.class_attr)
 # 31 min stop
+
+
+# for tech screening
+class C:
+    pass
+
+a = C()
+b = C()
+print(a == b) # 1)false если класс не переопределяет __eq__ то == здесь работает как is
+a = b = C()
+print(a == b) # 2)true - ссылаются на один объект в памяти
