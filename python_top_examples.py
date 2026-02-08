@@ -700,9 +700,6 @@ def file_reader(file):
 
 
 
-
-
-
 def self_read(path):
     try:
         with open(path, 'r', encoding='utf-8') as f:
