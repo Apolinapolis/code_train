@@ -3,12 +3,18 @@ from datetime import datetime
 
 class Person:
     name: str # Аннотация типа (Так принято)
+    last_name: str
     class_attr = 'атрибут класса' # Меняя его, меняем значение во всех экземплярах
 
     # Метод инициализации объекта (не создает объект, а только инициализирует)
-    def __init__(self, name):
+    def __init__(self, name, last_name):
         self.name = name
+        self.last_name = last_name
         self.class_attr = 3 #Атрибут объекта. Можно назвать как и атрибут класса, они друг другу не мешают
+
+    def __str__(self):
+        # Магические методы обычно вызываются встроенными функциями: str(obj) вызывает str().
+        return self.name
 
     # Метод экземпляра класса. Можно вызвать только создав экземпляр
     def say_hi(self):
@@ -24,19 +30,35 @@ class Person:
     def get_current_time():
         return datetime.now()
 
+    @property # теперь функция будет вызываться как атрибут и динамически вычислять значение
+    def full_name(self):
+        return f'{self.last_name} {self.name}'
+
+    @full_name.setter
+    def full_name(self, value):
+        name_surname = value.split(' ')
+        self.name, self.last_name = name_surname
+
+
     public = 'pass' # Публичный метод
     _protected = 'password' # Договоренность о подчеркивании
     __private = 'mangling' # Вызывается Person._Person__private (имя искажается питоном)
 
 
-tes = Person('dimon')
-
-
-
+ob = Person('dimon','top')
 print(Person.class_attr)
-print(tes.class_attr)
-# 31 min stop
+print(ob.class_attr)
+Person.get_current_time()
+ob.get_current_time()
+di = Person('Dima', 'Best')
+print(di.full_name)
+# Person._Person__private()
 
+di.full_name = 'changed surname'
+print(di.name)
+print(di.last_name)
+
+ob.__str__()
 
 # for tech screening
 class C:
@@ -44,6 +66,8 @@ class C:
 
 a = C()
 b = C()
-print(a == b) # 1)false если класс не переопределяет __eq__ то == здесь работает как is
+#print(a == b) # 1)false если класс не переопределяет __eq__ то == здесь работает как is
 a = b = C()
-print(a == b) # 2)true - ссылаются на один объект в памяти
+#print(a == b) # 2)true - ссылаются на один объект в памяти
+
+# 34.35 min stop

@@ -375,47 +375,6 @@ def test_sobes():
     print(['123','da'][False][1]) # 2
 
 
-
-
-
-import time
-
-class A:
-    def __init__(self):
-        # Вызывается при создании объекта
-        self.text = "IIM"
-
-    @staticmethod
-    # статический метод не требует экземпляра
-    def what_time():
-        return f"{time.time()}"
-
-    @property
-    # превращает метод в атрибут только для чтения.
-    def useless_getter(self):
-        return self.text
-
-    def __private_or_public(self):
-        # Имя искажается чз name-mangling. псевдо приватность
-        return 1
-
-    def __str__(self):
-        # Магические методы обычно вызываются встроенными функциями: str(obj) вызывает str().
-        return self.text
-
-
-ob = A()
-
-A.what_time()
-ob.what_time()
-
-ob.useless_getter
-
-ob._A__private_or_public()
-
-ob.__str__()
-
-
 # just test
 
 example_data = {
