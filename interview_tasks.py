@@ -1,5 +1,6 @@
 #TODO Вернуть True если палиндром
 #'abba' == True / 'racecar' == True / 'boom' ==  False
+from pygame.examples.go_over_there import reset
 
 
 def is_palindrome(s:str)-> bool:
@@ -61,4 +62,49 @@ def decorator_x2(func):
 def summator(*args:int)->int:
     return sum(args)
 
-print(summator(4,8,2,7))
+#print(summator(4,8,2,3))
+
+
+def decorator_with_param(n=123):
+    """Для проброса параметров нужно добавить еще вложенность и возвращать (не вызывая) обертки"""
+    def decorator(func):
+        def wrapper(*args):
+            result = func(*args) * n
+            return result
+        return wrapper
+    return decorator
+
+
+@decorator_with_param(4) #аналог get_summ = decorator_with_param(2)(get_summ)
+def get_summ(*args:int)->int:
+    return sum(args)
+
+print(get_summ(1,2,4))
+
+
+#TODO декоратор который делает retry 3 раза, если функция упала с exception.
+
+def retry(retries=3):
+    def decorator(func):
+        def wrapper(*args):
+            last_exception = None
+
+            for attempt in range(retries):
+                try:
+                    return func(*args)
+                except Exception as e:
+                    last_exception = e
+                    print(f'Attempt {attempt} result: {e}')
+            print("STOP RETRY")
+            raise last_exception
+        return wrapper
+    return decorator
+
+
+@retry(4)
+def unstable_func(*str):
+    result = str
+    raise TypeError("Something wrong")
+
+
+#print(unstable_func(3))

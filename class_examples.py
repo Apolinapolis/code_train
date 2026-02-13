@@ -34,7 +34,7 @@ class Person:
     def full_name(self):
         return f'{self.last_name} {self.name}'
 
-    @full_name.setter
+    @full_name.setterй
     def full_name(self, value):
         name_surname = value.split(' ')
         self.name, self.last_name = name_surname

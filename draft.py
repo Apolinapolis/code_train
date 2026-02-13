@@ -686,6 +686,23 @@ def group_anagram(words):
     return result
 
 
+# Проверяем что все скобки имеют пару и порядок '{[[][][]}}('
+
+def check_symbols(data)-> bool:
+    pairs = {')':'(', '}':'{', ']':'['}
+    stack = []
+
+    for el in data:
+        if el in pairs.values():
+            stack.append(el)
+        elif el in pairs:
+            if not stack or pairs[el] != stack[-1]:
+                return False
+            stack.pop()
+        else:
+            return False
+
+    return not stack
 
 
 
