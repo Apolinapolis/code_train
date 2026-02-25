@@ -1,11 +1,11 @@
-import math
+def nb_year(start, percent, aug, needed):
+    year = 0
+    temp = start
 
+    while temp < needed:
+        year += 1
+        temp += round(temp * (percent / 100) + aug)
 
-def find_next_square(sq):
-    a = math.sqrt(sq)
-    if a == int(a):
-        return int((a+1) * (a+1))
-    return -1
+    return year
 
-
-print(find_next_square(121))
+print(nb_year(1500000, 2.5, 10000, 2000000))
