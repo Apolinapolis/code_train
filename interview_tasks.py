@@ -20,7 +20,7 @@ def is_palindrome_improved_method_two(s:str)->bool:
     s = [ch for ch in s.lower() if ch.isalpha()]
     return s == s[::-1]
 
-print(is_palindrome_improved_method_two("Do geese see God?"))
+#print(is_palindrome_improved_method_two("Do geese see God?"))
 
 
 
@@ -79,7 +79,7 @@ def decorator_with_param(n=123):
 def get_summ(*args:int)->int:
     return sum(args)
 
-print(get_summ(1,2,4))
+#print(get_summ(1,2,4))
 
 
 #TODO декоратор который делает retry 3 раза, если функция упала с exception.
@@ -108,3 +108,19 @@ def unstable_func(*str):
 
 
 #print(unstable_func(3))
+
+
+#TODO вернуть отсортированный список уникальных квадратов из строки for WB
+
+def get_unic_square(data:str)->list[int]:
+    result = set()
+    for el in data.split():
+        try:
+            n = int(el)
+            result.add(n*n)
+        except ValueError:
+            pass
+    return sorted(result)
+
+
+#print(get_unic_square('fskl 4 3  9 -88 - sdf a3'))
