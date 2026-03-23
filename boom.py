@@ -1,49 +1,93 @@
-# Вернуть сумму вхождений
-statuses = 'skip, pass, failed, failed, pass, pass, error, skip, error, error'
+# Есть JSON, нужно вытащить из него уникальные цвета (color) для аксессуаров типа phoneCase:
+from fontTools.t1Lib import stringToLong
+from numpy.ma.core import append
 
-def summarize_result(data:str)->dict:
-    data = data.split(',')
-    counter = {}
-    for el in data:
-        el = el.strip()
-        if el in counter:
-            counter[el]+=1
+json_data = {
+    "phone": {
+        "model": "CoolPhone",
+        "screen": 5,
+        "accessories": [
+            {"type": "phoneCase", "color": "grey"},
+            {"type": "phoneCase", "color": "blue"},
+            {"type": "phoneCase", "color": "grey"},
+            {"type": "phoneCase", "color": "blue"},
+            {"type": "ScreenProtector", "color": "noColor"},
+            {"type": "phoneCase", "color": "red"}
+        ]
+    }
+}
+
+uniq_colors = {acc['color'] for acc in json_data['phone']['accessories'] if acc['type'] == 'phoneCase'}
+
+# найти наибольший int
+
+s = 'i8sdgf928ury63jds9sf9a3333'
+
+def func(s):
+    result = []
+    current = ''
+
+    for el in s:
+        if el.isdigit():
+            current += el
         else:
-            counter[el] = 1
-    return dict(sorted(counter.items(), key=lambda x: x[1], reverse=True)) # Добавлена сортировка
+            if current:
+                result.append(int(current))
+                current = ''
+    if current:
+        result.append(int(current))
+    return max(result)
 
+print(func(s))
 
-# Вариант через импорт
-def summarize_result_two(data:str)->dict:
-    return dict(Counter(x.strip() for x in data.split(',')))
+# TODO  = 01 __eq__ / 02 review / 06 what / 07 csv
+
+# # Вернуть сумму вхождений
+# statuses = 'skip, pass, failed, failed, pass, pass, error, skip, error, error'
+#
+# def summarize_result(data:str)->dict:
+#     data = data.split(',')
+#     counter = {}
+#     for el in data:
+#         el = el.strip()
+#         if el in counter:
+#             counter[el]+=1
+#         else:
+#             counter[el] = 1
+#     return dict(sorted(counter.items(), key=lambda x: x[1], reverse=True)) # Добавлена сортировка
+#
+#
+# # Вариант через импорт
+# def summarize_result_two(data:str)->dict:
+#     return dict(Counter(x.strip() for x in data.split(',')))
 
 
 # Написать класс Car:  свойства color (текст),  price (нецелое число). Метод get_final_price — если цвет «красный», цена на 15% дороже от базовой.
 # Создать класс HeavyCar, унаследованный от Car: свойство has_trailer (булево). Переопределить get_final_price: прицеп — +25% от базовой цены. Использовать super().
 
-class Car:
-    def __init__(self, color:str, price:float):
-        self.color = color
-        self.price = price
+# class Car:
+#     def __init__(self, color:str, price:float):
+#         self.color = color
+#         self.price = price
+#
+#     def get_final_price(self):
+#         if self.color == 'red':
+#             return self.price * 1.15
+#         return self.price
 
-    def get_final_price(self):
-        if self.color == 'red':
-            return self.price * 1.15
-        return self.price
 
-
-class HeavyCar(Car):
-    def __init__(self, color:str, price:float, has_trailer:bool):
-        self.has_trailer = has_trailer
-        super().__init__(color, price)
-
-    def get_final_price(self, digits=2)->float:
-        price = super().get_final_price()
-
-        if self.has_trailer:
-            price += self.price * 0.25
-
-        return round(price, digits)
+# class HeavyCar(Car):
+#     def __init__(self, color:str, price:float, has_trailer:bool):
+#         self.has_trailer = has_trailer
+#         super().__init__(color, price)
+#
+#     def get_final_price(self, digits=2)->float:
+#         price = super().get_final_price()
+#
+#         if self.has_trailer:
+#             price += self.price * 0.25
+#
+#         return round(price, digits)
 
 
 # Фикстуры и параметризация
@@ -87,153 +131,106 @@ def test_moscow_users(msk_users_count):
     print(f'it is {msk_users_count} users from Moscow')
 
 
-# Каков будет вывод?
-def append_list(val, list=[]):
-    list.append(val)
-    return list
-
-list_1 = append_list(10) # [10]
-list_2 = append_list(123,[]) # [123]
-list_3 = append_list('a') # [10,'a']
-
-print(list_1, list_2, list_3)
-
-
-# Каков будет вывод?
-D={'a':1, 'b':2, 'c':3, 'd':4, 'e':5}
-print([i for i in range(3) if i in D.values()]) # [1,2]
-
-
-
-# Каков будет вывод?
-def func(val, *args, **kwargs):
-    print(val)
-    print(args)
-    print(kwargs)
-
-func("Hi", "Ozon", {"a": 1, "b": 2}, pi=3.14, e=2.71)
-
-
-# Есть JSON, нужно вытащить из него уникальные цвета (color) для аксессуаров типа phoneCase:
-json_data = {
-    "phone": {
-        "model": "CoolPhone",
-        "screen": 5,
-        "accessories": [
-            {"type": "phoneCase", "color": "grey"},
-            {"type": "phoneCase", "color": "blue"},
-            {"type": "phoneCase", "color": "grey"},
-            {"type": "phoneCase", "color": "blue"},
-            {"type": "ScreenProtector", "color": "noColor"},
-            {"type": "phoneCase", "color": "red"}
-        ]
-    }
-}
-
-uniq_colors = {acc['color'] for acc in json_data['phone']['accessories'] if acc['type'] == 'phoneCase'}
-
-
-
-# Декоратор, который напишет start до и end после выполнения функции
-def decor(func):
-    def wrapper(*args, **kwargs):
-        print('start')
-        result = func(*args, **kwargs)
-        print('end')
-        return result
-    return wrapper
-
-
-@decor
-def summa(a,b=0):
-    return print(a+b)
-
-summa(1,10)
-
-# Декоратор с отложенным запуском
-import time
-
-
-def decor_delay(sec):
-    def decorator(func):
-        def wrapper(*args,**kwargs):
-            time.sleep(sec)
-            return func(*args,**kwargs)
-        return wrapper
-    return decorator
-
-
-@decor_delay(sec=10)
-def summa(a,b=0):
-    return print(a+b)
-
 
 # Чтобы fixture вызывалась в теле теста и возвращала список random int по длине count а после теста очищаем список
-import random
-
-def generate_item()->int:
-    return random.randint(1,20)
-
-@pytest.fixture
-def setup_items():
-    def _gen(count:int):
-        return [generate_item() for _ in range(count)]
-    return _gen
-
-@pytest.fixture
-def setup_items_clear():
-    items = []
-    def _gen(count:int):
-        items.clear() #fix
-        for _ in range(count):
-            items.append(generate_item())
-        return items
-    yield _gen
-    items.clear()
-
-
-def op_test_a(setup_items):
-    item_ids = setup_items(count=3)
+# import random
+#
+# def generate_item()->int:
+#     return random.randint(1,20)
+#
+# @pytest.fixture
+# def setup_items():
+#     def _gen(count:int):
+#         return [generate_item() for _ in range(count)]
+#     return _gen
+#
+# @pytest.fixture
+# def setup_items_clear():
+#     items = []
+#     def _gen(count:int):
+#         items.clear() #fix
+#         for _ in range(count):
+#             items.append(generate_item())
+#         return items
+#     yield _gen
+#     items.clear()
+#
+# def op_test_a(setup_items):
+#     item_ids = setup_items(count=3)
 
 
 # Уникальные символы = (
-from collections import Counter
+# O(n) / O(n2) methods
+# from collections import Counter
+#
+# a = 'Su cc ess'
+#
+# def func_on(s: str) -> str:
+#     s = s.lower()
+#     counts = Counter(s)  # считаем все символы
+#     result = []
+#
+#     for ch in s:
+#         if counts[ch] == 1:
+#             result.append('(')
+#         else:
+#             result.append(')')
+#     return ''.join(result)
+#
+#
+# def func_on2(string:str)->str:
+#     data = string.lower()
+#     result = []
+#
+#     for el in data:
+#         if data.count(el)==1:
+#             result.append('(')
+#         else:
+#             result.append(')')
+#     return ''.join(result)
 
-def func(s: str) -> str:
-    counts = Counter(s)  # считаем все символы
-    result = ''
 
-    for ch in s:
-        if not ch.isalpha():  # пропускаем пробелы/знаки
-            continue
-        if counts[ch] == 1:
-            result += '('
-        else:
-            result += ')'
-    print(counts)
-    print(result)
+# # Вернуть сумму вхождений
+# statuses = 'skip, pass, failed, failed, pass, pass, error, skip, error, error'
+#
+# def incoming_counter(str)->dict:
+#     counter = {}
+#     for el in str.split(','):
+#         el = el.strip()
+#         if el in counter:
+#             counter[el] += 1
+#         else:
+#             counter[el] = 1
+#     #return counter
+#     return dict(sorted(counter.items(), key = lambda x: x[1], reverse=True))
+#
+# print(incoming_counter(statuses))
 
-a = 'fia asofdw as'
-func(a)
 
+# Написать класс Car:  свойства color (текст),  price (нецелое число). Метод get_final_price — если цвет «красный», цена на 15% дороже от базовой.
+# Создать класс HeavyCar, унаследованный от Car: свойство has_trailer (булево).
+# Переопределить get_final_price: прицеп — +25% от базовой цены. Использовать super(). Итог округлить до 2х цифр после запятой
 
-# найти наибольший int
-
-s = 'i8sdgf928ury63jds9sf9a3333'
-
-def func(s):
-    result = []
-    current = ''
-
-    for el in s:
-        if el.isdigit():
-            current += el
-        else:
-            if current:
-                result.append(int(current))
-                current = ''
-    if current:
-        result.append(int(current))
-    return max(result)
-
-print(func(s))
+# class Car:
+#     def __init__(self, color, price):
+#         self.color = color
+#         self.price = price
+#
+#     def get_final_price(self):
+#         if self.color == 'red':
+#             return self.price * 1.15
+#         return self.price
+#
+#
+# class HeavyCar(Car):
+#     def __init__(self, color, price, has_trailer):
+#         super().__init__(color, price)
+#         self.has_trailer = has_trailer
+#
+#     def get_final_price(self, digits=2):
+#         final_price = super().get_final_price()
+#         if self.has_trailer:
+#             final_price += self.price * 0.25
+#         return round(final_price, digits)
+#
+# print(HeavyCar('red',100,True).get_final_price(0))
